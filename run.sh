@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
-./premake5
+CONFIG=Debug
+PROJECT=actman
+
+./premake5 gmake
 make
+bin/$CONFIG/$PROJECT
