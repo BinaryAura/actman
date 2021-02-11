@@ -7,6 +7,8 @@ project "actman"
   targetdir "bin/%{cfg.buildcfg}"
   objdir "obj/%{cfg.buildcfg}"
 
+  includedirs { "include" }
+
   files { "include/**.h", "src/**.cpp" }
 
   filter "configurations:Debug"
