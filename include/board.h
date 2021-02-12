@@ -6,8 +6,10 @@
 #include "objects/gameobject.h"
 #include "cell.h"
 
+
 class Board {
 public:
+
   Board(uint32_t rows=0, uint32_t cols=0) : rows(rows), cols(cols) {}
 
   uint32_t get_rows() {

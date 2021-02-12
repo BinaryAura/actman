@@ -1,5 +1,7 @@
 cmake-build-debug/
 bin/
-obj/
+build/
+lib/
+test/
 *.make
 Makefile

@@ -1,22 +1,18 @@
+#include <cstring>
 #include <iostream>
-#include <stdlib.h>
-#include <inttypes.h>
-#include <random>
+#include <fstream>
+#include <spdlog/spdlog.h>
 
-#include <vector>
+#include "actman.h"
+#include "error.h"
 
-#include "board.h"
-#include "objects/wall.h"
-
-int32_t main(int32_t argc, char** argv) {
-  Board board(4,4);
-  std::vector<Wall> walls;
-
-  for (uint32_t i = 0; i < 4; i++) {
-    walls.emplace_back(0,i);
+int32_t main(int32_t argc, const char** argv) {
+  std::vector<std::string> av;
+  for(int32_t i = 1; i < argc; i++) {
+    av.push_back(argv[i]);
   }
 
-  for (uint32_t i = 0; i < 4; i++) {
-    board.add_object(walls[i]);
-  }
+  ActMan game;
+  game.setup(av);
+  return 0;
 }
