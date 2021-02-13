@@ -2,6 +2,7 @@
 #define ACTMAN_H
 
 #include "application.h"
+#include "board/boardconfig.h"
 
 class ActMan : public Application {
 public:
@@ -11,6 +12,8 @@ public:
   virtual void reset();
 protected:
   virtual const char* print_help() const override;
+
+  BoardConfig config;
 
   std::filesystem::path config_file;
   std::filesystem::path output_file;

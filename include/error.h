@@ -9,6 +9,7 @@
 #define NO_SUCH_OPTION 1
 #define NO_SUCH_POS_OPTION 2
 #define NO_SUCH_FILE 3
+#define CONFIG_ERROR 4
 
 struct Error : public std::exception {
   Error(int32_t id) : id(id) {}
@@ -55,6 +56,17 @@ struct NoSuchFile : public FileError {
   const char* what() const throw() {
     return "No such file";
   }
+};
+
+struct ConfigError : public FileError {
+  ConfigError(const std::string file, uint32_t line, uint32_t column, const char* text) : FileError(CONFIG_ERROR, file), line(line), column(column), text(text) {}
+  const char* what() const throw() {
+    return "Config Parse Error";
+  }
+
+  const uint32_t line;
+  const uint32_t column;
+  const char* text;
 };
 
 #endif // ERROR_H

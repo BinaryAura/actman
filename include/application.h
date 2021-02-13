@@ -10,7 +10,7 @@
 #include <spdlog/spdlog.h>
 
 #include "error.h"
-#include "boardconfig.h"
+// #include "boardconfig.h"
 // #include "scene.h"
 
 #ifdef DEBUG
@@ -44,11 +44,17 @@ public:
       fprintf(stderr, "%s: '%s'\n", err.what(), err.arg);
       fprintf(stderr, "actman %s", this->usage());
       exit(err.id);
+    } catch (const ConfigError& err) {
+      fprintf(stderr, "%s: %s:%d:", err.what(), err.file.c_str(), err.line);
+      if(err.column >= 0)
+        fprintf(stderr, "%d:", err.column);
+      fprintf(stderr, " %s\n", err.text);
+      exit(err.id);
     } catch (const FileError& err) {
       fprintf(stderr, "%s: %s\n", err.what(), err.file.c_str());
       exit(err.id);
     } catch (const std::ifstream::failure& err) {
-      fprintf(stderr, "%s", err.what());
+      fprintf(stderr, "%s\n", err.what());
       exit(err.code().value());
     }
   }
@@ -62,9 +68,9 @@ protected:
   void process_events();
 
   // Scene scene;
-  bool running;
+  bool running = true;
   // Scene scene;
-  BoardConfig config;
+  // BoardConfig config;
   spdlog::level::level_enum core_level = CORE_DEF_LVL;
   spdlog::level::level_enum client_level = CLIENT_DEF_LVL;
 };

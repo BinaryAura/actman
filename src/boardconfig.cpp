@@ -3,84 +3,96 @@
 #include <iostream>
 
 #include "error.h"
-#include "boardconfig.h"
+#include "board/boardconfig.h"
 
 BoardConfig::BoardConfig(std::filesystem::path config_file) {
   this->load_config(config_file);
 }
 
 void BoardConfig::load_config(std::filesystem::path config_file) {
+  uint32_t l = 1, c = 1;
   std::ifstream config(config_file);
 
   if(!config) {
     throw NoSuchFile(config_file.string());
   }
 
+
   uint32_t rows, cols;
   config >> rows >> cols;
+  if(rows < 0) {
+    throw ConfigError(config_file.string(), l, -1, std::to_string(rows).c_str());
+  }
+  if(cols < 0) {
+    throw ConfigError(config_file.string(), l, -1, std::to_string(cols).c_str());
+  }
   config.ignore();
+  l++;
 
-  std::vector<std::string> board;
   char *buffer = new char[cols + 1];
   for(uint32_t r = 0; r < rows; r++) {
     config.getline(buffer, cols + 1);
-    board.push_back(std::string(buffer));
+    this->init_state.push_back(std::string(buffer));
+    for(auto ch : this->init_state.back()) {
+      switch(ch) {
+        case ' ':
+        case '#':
+        case '.':
+        case '$':
+        case '*':
+        case 'A':
+        case 'P':
+        case 'B':
+        case 'D':
+        case 'R':
+          break;
+        default:
+          throw ConfigError(config_file.string(), l, c, std::string(&ch, 1).c_str());
+      }
+      c++;
+    }
+    c = 1;
+    l++;
   }
-  delete buffer;
-  this->set_state(board);
+  delete[] buffer;
   char dirs[4];
   config.getline(dirs, 5);
   for(uint32_t i = uint32_t(Ghost::PUNKY); i < uint32_t(Ghost::NUM_GHOSTS); i++) {
-    Direction d;
-    switch(dirs[i]) {
-      case 'U':
-        d = Direction::NORTH;
-        break;
-      case 'R':
-        d = Direction::EAST;
-        break;
-      case 'D':
-        d = Direction::SOUTH;
-        break;
-      case 'L':
-        d = Direction::WEST;
-        break;
+    try {
+      this->set_direction(Ghost(i), this->parse_direction(dirs[i]));
+    } catch(const ConfigError& err) {
+      throw ConfigError(config_file, l, c, err.text);
     }
-    this->set_direction(Ghost(i), d);
+    c++;
   }
+  l++;
   uint32_t n_chkpts, x, y;
   config >> n_chkpts;
+  if(n_chkpts < 0)
+    throw ConfigError(config_file, l, -1, std::to_string(n_chkpts).c_str());
   for (uint32_t i = 0; i < n_chkpts; i++) {
     config >> y >> x;
+    if(x < 0)
+      throw ConfigError(config_file, l, -1, std::to_string(x).c_str());
+    if(y < 0)
+      throw ConfigError(config_file, l, -1, std::to_string(y).c_str());
     add_to_patrol({x, y});
   }
   config.ignore();
-  char buf;
+  l++;
   do {
-    buf = config.get();
-    Direction d;
-    switch(buf) {
-      case 'U':
-        d = Direction::NORTH;
-        break;
-      case 'R':
-        d = Direction::EAST;
-        break;
-      case 'D':
-        d = Direction::SOUTH;
-        break;
-      case 'L':
-        d = Direction::WEST;
-        break;
-      default:
-        buffer = 0;
-        break;
+    try {
+      this->add_to_pool(this->parse_direction(config.get()));
+    } catch(const ConfigError& err) {
+      throw ConfigError(config_file, l, c, err.text);
     }
-    this->add_to_pool(d);
-  }while(buffer);
+
+  } while(config.peek() == 'U' || config.peek() == 'R' || config.peek() == 'D' || config.peek() == 'L');
+  if(this->dir_pool.size() <= 0)
+    throw ConfigError(config_file, l, -1, "");
 }
 
-void BoardConfig::set_state(std::vector<std::string> board) {
+void BoardConfig::set_state(std::vector<std::string>& board) {
   this->init_state = board;
   this->rows = board.size();
   this->cols = board[0].size();
@@ -90,7 +102,7 @@ void BoardConfig::set_direction(Ghost ghost, Direction dir) {
   this->dirs[uint32_t(ghost)] = dir;
 }
 
-void BoardConfig::set_patrol(std::vector<Cell> patrol) {
+void BoardConfig::set_patrol(std::vector<Cell>& patrol) {
   this->patrol = patrol;
 }
 
@@ -102,7 +114,7 @@ void BoardConfig::clear_patrol() {
   this->patrol.clear();
 }
 
-void BoardConfig::set_pool(std::vector<Direction> dirs) {
+void BoardConfig::set_pool(std::vector<Direction>& dirs) {
   this->dir_pool = dirs;
 }
 
@@ -112,4 +124,48 @@ void BoardConfig::add_to_pool(Direction dir) {
 
 void BoardConfig::clear_pool() {
   this->dir_pool.clear();
+}
+
+BoardConfig::BoardConfig(BoardConfig& config) {
+  this->rows = config.rows;
+  this->cols = config.cols;
+  this->init_state = config.init_state;
+  for(uint32_t i = 0; i < 4; i++) {
+    this->dirs[i] = config.dirs[i];
+  }
+  this->patrol = config.patrol;
+  this->dir_pool = config.dir_pool;
+}
+
+BoardConfig& BoardConfig::operator= (const BoardConfig& config) {
+  if (this == &config) {
+    return *this;
+  }
+  this->rows = config.rows;
+  this->cols = config.cols;
+  this->init_state = config.init_state;
+  for(uint32_t i = 0; i < 4; i++) {
+    this->dirs[i] = config.dirs[i];
+  }
+  this->patrol = config.patrol;
+  this->dir_pool = config.dir_pool;
+  return *this;
+}
+
+Direction BoardConfig::parse_direction(char dir) const {
+  switch(dir) {
+    case 'U':
+      return Direction::NORTH;
+      break;
+    case 'R':
+      return Direction::EAST;
+      break;
+    case 'D':
+      return Direction::SOUTH;
+      break;
+    case 'L':
+      return Direction::WEST;
+      break;
+  }
+  throw ConfigError("", -1, -1, std::string(&dir, 1).c_str());
 }

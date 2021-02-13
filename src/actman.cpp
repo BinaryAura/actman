@@ -6,7 +6,7 @@
 #include "log.h"
 #include "actman.h"
 #include "error.h"
-#include "boardconfig.h"
+// #include "boardconfig.h"
 
 void ActMan::parse(std::vector<std::string> argv) {
 
@@ -64,7 +64,7 @@ const char* ActMan::usage() const {
 }
 
 void ActMan::configure() {
-  this->config = BoardConfig(this->config_file);
+  this->config.load_config(this->config_file);
   // Todo: setup scene
 }
 
