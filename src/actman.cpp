@@ -65,9 +65,8 @@ const char* ActMan::usage() const {
 
 void ActMan::configure() {
   this->config.load_config(this->config_file);
-  // Todo: setup scene
 }
 
 void ActMan::reset() {
-
+  
 }

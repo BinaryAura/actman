@@ -14,7 +14,6 @@ protected:
   virtual const char* print_help() const override;
 
   BoardConfig config;
-
   std::filesystem::path config_file;
   std::filesystem::path output_file;
 };

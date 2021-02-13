@@ -6,8 +6,7 @@
 
 // #include "board.h"
 #include "cell.h"
-
-enum class Direction {NORTH, EAST, SOUTH, WEST, NUM_DIRS};
+#include "components/boardtransform.h"
 
 enum class Ghost {PUNKY, BUNKY, DUNKY, RUNKY, NUM_GHOSTS};
 
@@ -16,7 +15,7 @@ public:
   BoardConfig(uint32_t rows=0, uint32_t cols=0) : rows(rows), cols(cols) {}
   BoardConfig(std::filesystem::path config_file);
   BoardConfig(BoardConfig& config);
-  
+
   void load_config(std::filesystem::path config_file);
 
   void set_state(std::vector<std::string>& board);

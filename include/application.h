@@ -10,8 +10,7 @@
 #include <spdlog/spdlog.h>
 
 #include "error.h"
-// #include "boardconfig.h"
-// #include "scene.h"
+#include "scene.h"
 
 #ifdef DEBUG
   #define CORE_DEF_LVL spdlog::level::info
@@ -25,9 +24,9 @@ class Application {
 public:
   int32_t run() {
     while(this->running) {
-      process_events();
-      update();
-      render();
+      // process_events();
+      // update();
+      // render();
     }
     return 0;
   }
@@ -57,20 +56,19 @@ public:
       fprintf(stderr, "%s\n", err.what());
       exit(err.code().value());
     }
+    this->reset();
   }
   virtual void reset() = 0;
   virtual const char* usage() const { return ""; }
 
 protected:
   virtual const char* print_help() const { return ""; }
-  void update();
-  void render();
-  void process_events();
+  void on_input();
+  void on_update();
+  void on_render();
 
-  // Scene scene;
   bool running = true;
-  // Scene scene;
-  // BoardConfig config;
+  Scene scene;
   spdlog::level::level_enum core_level = CORE_DEF_LVL;
   spdlog::level::level_enum client_level = CLIENT_DEF_LVL;
 };
