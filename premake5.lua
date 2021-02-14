@@ -35,7 +35,8 @@ project "actman"
     "src/main.cpp",
     "src/log.cpp",
     "src/actman.cpp",
-    "src/boardconfig.cpp"
+    "src/boardconfig.cpp",
+    "src/scene.cpp"
   }
 
   filter "configurations:Debug"

@@ -6,7 +6,8 @@
 #include "log.h"
 #include "actman.h"
 #include "error.h"
-// #include "boardconfig.h"
+#include "entity.h"
+#include "components/boardtransform.h"
 
 void ActMan::parse(std::vector<std::string> argv) {
 
@@ -68,5 +69,40 @@ void ActMan::configure() {
 }
 
 void ActMan::reset() {
-  
+  uint32_t y = 0, x = 0;
+  for(auto line : this->config.init_state) {
+    for(auto cell : line) {
+      Entity entity = this->scene.create_entity();
+      switch(cell) {
+        case '#': // Wall
+          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          break;
+        case '.': // Gold Nugget
+          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          break;
+        case '$': // Gold Bar
+          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          break;
+        case 'A': // ActMan
+          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          break;
+        case 'P': // Punky
+          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::PUNKY]);
+          break;
+        case 'B': // Bunky
+          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::BUNKY]);
+          break;
+        case 'D': // Dunky
+          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::DUNKY]);
+          break;
+        case 'R': // Runky
+          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::RUNKY]);
+          break;
+      }
+      x++;
+
+    }
+    x = 0;
+    y++;
+  }
 }

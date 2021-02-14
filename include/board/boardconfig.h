@@ -7,8 +7,9 @@
 // #include "board.h"
 #include "cell.h"
 #include "components/boardtransform.h"
+#include "actmancommon.h"
 
-enum class Ghost {PUNKY, BUNKY, DUNKY, RUNKY, NUM_GHOSTS};
+enum class Ghost;
 
 class BoardConfig {
 public:

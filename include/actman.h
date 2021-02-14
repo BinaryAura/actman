@@ -1,6 +1,7 @@
 #ifndef ACTMAN_H
 #define ACTMAN_H
 
+#include "actmancommon.h"
 #include "application.h"
 #include "board/boardconfig.h"
 

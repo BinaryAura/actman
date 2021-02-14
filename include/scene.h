@@ -12,22 +12,22 @@ public:
   Entity create_entity();
 
   template<typename T>
-  bool has_component(entt::entity entity) {
+  bool has_component(entt::entity& entity) {
     return this->registry.has<T>(entity);
   }
 
   template<typename T, typename ... Args>
-  T& add_component(entt::entity entity, Args&& ... args) {
+  T& add_component(entt::entity& entity, Args&& ... args) {
     return this->registry.emplace<T>(entity, std::forward<Args>(args) ...);
   }
 
   template<typename T>
-  T& get_component(entt::entity entity) {
+  T& get_component(entt::entity& entity) {
     return this->registry.get<T>(entity);
   }
 
   template<typename T>
-  T& remove_component(entt::entity entity) {
+  T& remove_component(entt::entity& entity) {
     return this->registry.remove<T>(entity);
   }
 
