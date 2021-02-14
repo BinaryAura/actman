@@ -7,7 +7,9 @@
 #include "actman.h"
 #include "error.h"
 #include "entity.h"
-#include "components/boardtransform.h"
+#include "components/transform.h"
+#include "components/cursessprite.h"
+#include "physics/tilephysics.h"
 
 void ActMan::parse(std::vector<std::string> argv) {
 
@@ -66,6 +68,9 @@ const char* ActMan::usage() const {
 
 void ActMan::configure() {
   this->config.load_config(this->config_file);
+  this->window = Window::create({"ActMan", this->config.cols + 2, this->config.rows + 2});
+  this->physics = (Physics*)(new TilePhysics());
+  this->renderer = (Renderer*)(new CursesRenderer());
 }
 
 void ActMan::reset() {
@@ -75,28 +80,44 @@ void ActMan::reset() {
       Entity entity = this->scene.create_entity();
       switch(cell) {
         case '#': // Wall
-          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          entity.add_component<Transform>(x, y, 0);
+          entity.add_component<CursesSprite>("#", true);
+          // entity.add_component<BoardPhysics>(0, true);
           break;
         case '.': // Gold Nugget
-          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          entity.add_component<Transform>(x, y, 0);
+          entity.add_component<CursesSprite>(".", true);
+          // entity.add_component<BoardPhysics>(0, false);
           break;
         case '$': // Gold Bar
-          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          entity.add_component<Transform>(x, y, 0);
+          entity.add_component<CursesSprite>("$", true);
+          // entity.add_component<BoardPhysics>(0, false);
           break;
         case 'A': // ActMan
-          entity.add_component<BoardTransform>(x, y, Direction::NORTH);
+          entity.add_component<Transform>(x, y, 0);
+          entity.add_component<CursesSprite>("A", true);
+          // entity.add_component<BoardPhysics>(1, false);
           break;
         case 'P': // Punky
-          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::PUNKY]);
+          entity.add_component<Transform>(x, y, this->config.dirs[(uint32_t)Ghost::PUNKY]);
+          entity.add_component<CursesSprite>("P", true);
+          // entity.add_component<BoardPhysics>(1, false);
           break;
         case 'B': // Bunky
-          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::BUNKY]);
+          entity.add_component<Transform>(x, y, this->config.dirs[(uint32_t)Ghost::BUNKY]);
+          entity.add_component<CursesSprite>("B", true);
+          // entity.add_component<BoardPhysics>(1, false);
           break;
         case 'D': // Dunky
-          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::DUNKY]);
+          entity.add_component<Transform>(x, y, this->config.dirs[(uint32_t)Ghost::DUNKY]);
+          entity.add_component<CursesSprite>("D", true);
+          // entity.add_component<BoardPhysics>(1, false);
           break;
         case 'R': // Runky
-          entity.add_component<BoardTransform>(x, y, this->config.dirs[(uint32_t)Ghost::RUNKY]);
+          entity.add_component<Transform>(x, y, this->config.dirs[(uint32_t)Ghost::RUNKY]);
+          entity.add_component<CursesSprite>("R", true);
+          // entity.add_component<BoardPhysics>(1, false);
           break;
       }
       x++;

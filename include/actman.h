@@ -4,6 +4,7 @@
 #include "actmancommon.h"
 #include "application.h"
 #include "board/boardconfig.h"
+#include "physics/tilephysics.h"
 
 class ActMan : public Application {
 public:
@@ -14,6 +15,7 @@ public:
 protected:
   virtual const char* print_help() const override;
 
+  TilePhysics engine;
   BoardConfig config;
   std::filesystem::path config_file;
   std::filesystem::path output_file;

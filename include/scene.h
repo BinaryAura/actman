@@ -2,6 +2,9 @@
 #define SCENE_H
 
 #include <entt.hpp>
+#include "physics/physics.h"
+#include "window/window.h"
+#include "renderer/cursesrenderer.h"
 
 class Entity;
 
@@ -31,8 +34,15 @@ public:
     return this->registry.remove<T>(entity);
   }
 
+  void on_input() const;
+
+  void on_update(Physics* physics) const;
+
+  void on_render(Window* window) const;
+
 private:
   entt::registry registry;
+  CursesRenderer* curses_renderer;
 };
 
 #endif // SCENE_H

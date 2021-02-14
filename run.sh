@@ -3,7 +3,7 @@
 CONFIG=Debug
 PROJECT=actman
 
-./premake5 gmake
+./premake5 --c=clang++ gmake
 if [ $? != 0 ]; then
   exit
 fi

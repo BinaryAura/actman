@@ -14,5 +14,6 @@ int32_t main(int32_t argc, const char** argv) {
 
   ActMan game;
   game.setup(av);
+  game.run();
   return 0;
 }

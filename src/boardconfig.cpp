@@ -20,6 +20,8 @@ void BoardConfig::load_config(std::filesystem::path config_file) {
 
   uint32_t rows, cols;
   config >> rows >> cols;
+  this->rows = rows;
+  this->cols = cols;
   if(rows < 0) {
     throw ConfigError(config_file.string(), l, -1, std::to_string(rows).c_str());
   }
@@ -98,7 +100,7 @@ void BoardConfig::set_state(std::vector<std::string>& board) {
   this->cols = board[0].size();
 }
 
-void BoardConfig::set_direction(Ghost ghost, Direction dir) {
+void BoardConfig::set_direction(Ghost ghost, float dir) {
   this->dirs[uint32_t(ghost)] = dir;
 }
 
@@ -114,11 +116,11 @@ void BoardConfig::clear_patrol() {
   this->patrol.clear();
 }
 
-void BoardConfig::set_pool(std::vector<Direction>& dirs) {
+void BoardConfig::set_pool(std::vector<float>& dirs) {
   this->dir_pool = dirs;
 }
 
-void BoardConfig::add_to_pool(Direction dir) {
+void BoardConfig::add_to_pool(float dir) {
   this->dir_pool.push_back(dir);
 }
 
@@ -152,19 +154,19 @@ BoardConfig& BoardConfig::operator= (const BoardConfig& config) {
   return *this;
 }
 
-Direction BoardConfig::parse_direction(char dir) const {
+float BoardConfig::parse_direction(char dir) const {
   switch(dir) {
     case 'U':
-      return Direction::NORTH;
+      return 0;
       break;
     case 'R':
-      return Direction::EAST;
+      return 90;
       break;
     case 'D':
-      return Direction::SOUTH;
+      return 180;
       break;
     case 'L':
-      return Direction::WEST;
+      return 270;
       break;
   }
   throw ConfigError("", -1, -1, std::string(&dir, 1).c_str());

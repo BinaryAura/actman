@@ -6,11 +6,20 @@
 #include <filesystem>
 #include <string>
 #include <fstream>
+#include <unistd.h>
 
 #include <spdlog/spdlog.h>
 
 #include "error.h"
 #include "scene.h"
+#include "window/window.h"
+
+#include "physics/physics.h"
+#include "renderer/renderer.h"
+
+#ifdef NCURSES
+  #include "window/curseswindow.h"
+#endif
 
 #ifdef DEBUG
   #define CORE_DEF_LVL spdlog::level::info
@@ -24,9 +33,13 @@ class Application {
 public:
   int32_t run() {
     while(this->running) {
-      // process_events();
-      // update();
-      // render();
+      // Todo: process_events();
+      this->scene.on_input();
+      this->scene.on_update(this->physics);
+      #ifndef NORENDER
+        this->scene.on_render(this->window);
+        this->window->on_update();
+      #endif
     }
     return 0;
   }
@@ -63,12 +76,15 @@ public:
 
 protected:
   virtual const char* print_help() const { return ""; }
-  void on_input();
-  void on_update();
-  void on_render();
+  // void on_input();
+  // void on_update();
+  // void on_render();
 
   bool running = true;
   Scene scene;
+  Window *window;
+  Physics *physics;
+  Renderer *renderer;
   spdlog::level::level_enum core_level = CORE_DEF_LVL;
   spdlog::level::level_enum client_level = CLIENT_DEF_LVL;
 };

@@ -28,7 +28,8 @@ project "actman"
   }
 
   links {
-    "spdlog"
+    "spdlog",
+    "ncurses"
   }
 
   files {
@@ -36,7 +37,10 @@ project "actman"
     "src/log.cpp",
     "src/actman.cpp",
     "src/boardconfig.cpp",
-    "src/scene.cpp"
+    "src/scene.cpp",
+    "src/window/curseswindow.cpp",
+    "src/input/cursesinput.cpp",
+    "src/renderer/cursesrenderer.cpp"
   }
 
   filter "configurations:Debug"
