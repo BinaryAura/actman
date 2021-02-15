@@ -40,7 +40,8 @@ project "actman"
     "src/scene.cpp",
     "src/window/curseswindow.cpp",
     "src/input/cursesinput.cpp",
-    "src/renderer/cursesrenderer.cpp"
+    "src/renderer/cursesrenderer.cpp",
+    "src/physics/tilephysics.cpp"
   }
 
   filter "configurations:Debug"

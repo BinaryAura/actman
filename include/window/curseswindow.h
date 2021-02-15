@@ -31,8 +31,16 @@ public:
   // Todo: set vsync
   // Todo: is vsync
 
-  inline virtual void* get_native_window() const {
+  inline void* get_native_window() const override {
     return this->window;
+  }
+
+  inline float get_fps() const override {
+    return this->fps;
+  }
+
+  inline void set_fps(const float fps) override {
+    this->fps = fps;
   }
 private:
   void shutdown();

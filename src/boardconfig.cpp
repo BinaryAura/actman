@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
+#include <math.h>
 
 #include "error.h"
 #include "board/boardconfig.h"

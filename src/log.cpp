@@ -2,8 +2,8 @@
 
 #include "log.h"
 
-std::shared_ptr<spdlog::logger> Log::coreLogger;
-std::shared_ptr<spdlog::logger> Log::clientLogger;
+std::shared_ptr<spdlog::logger> Log::core_logger;
+std::shared_ptr<spdlog::logger> Log::client_logger;
 
 #ifdef DEBUG
   #define CORE_DEF_LVL spdlog::level::trace
@@ -17,9 +17,9 @@ void Log::init(std::string client_name, spdlog::level::level_enum level) {
 
 void Log::init(std::string client_name, spdlog::level::level_enum core_level, spdlog::level::level_enum client_level) {
   spdlog::set_pattern("[%T] [%n] %^[%l]: %v%$");
-  Log::coreLogger = spdlog::stdout_color_mt("ENGINE");
-  Log::coreLogger->set_level(core_level);
+  Log::core_logger = spdlog::stdout_color_mt("ENGINE");
+  Log::core_logger->set_level(core_level);
 
-  Log::clientLogger = spdlog::stdout_color_mt(client_name);
-  Log::clientLogger->set_level(client_level);
+  Log::client_logger = spdlog::stdout_color_mt(client_name);
+  Log::client_logger->set_level(client_level);
 }

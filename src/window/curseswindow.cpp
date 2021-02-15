@@ -1,4 +1,6 @@
 #include<chrono>
+#include<iostream>
+
 #include<ncurses.h>
 
 #include "window/curseswindow.h"
@@ -14,7 +16,6 @@ CursesWindow::CursesWindow(const Window::Properties& props) {
   if (!curses_initialized) {
     initscr();
     Input::_set_instance(new CursesInput());
-    keypad(this->window, true);
     curs_set(0);
     curses_initialized = true;
   }
@@ -23,6 +24,7 @@ CursesWindow::CursesWindow(const Window::Properties& props) {
   int32_t x = (COLS - props.width) / 2;
 
   this->window = newwin(props.height, props.width, y, x);
+  keypad(this->window, true);
   box(this->window, 0, 0);
   wrefresh(this->window);
 }
@@ -35,14 +37,16 @@ CursesWindow::~CursesWindow() {
 
 void CursesWindow::on_update() {
   // poll events
-  static auto last_update = 0;
+  static uint64_t last_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   box(this->window, 0, 0);
   // sync to 60 Hz
   uint64_t now;
   do {
     now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-  } while( this->fps > 1000 / float(now - last_update));
+    // std::cout << "now: " << now << " last_update: " << last_update << std::endl;
+    // std::cout << float(now - last_update) << std::endl;
+  } while( this->fps < 1000 / float(now - last_update));
+  // getch();
   wrefresh(this->window);
-  wclear(this->window);
   last_update = now;
 }

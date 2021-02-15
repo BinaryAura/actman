@@ -8,7 +8,7 @@
 class Entity {
 public:
   Entity() = default;
-  Entity(entt::entity id, Scene* scene) : id(id), scene(scene) {}
+  Entity(const entt::entity id, Scene* scene) : id(id), scene(scene) {}
 
   template<typename T>
   bool has_component() {
@@ -28,6 +28,12 @@ public:
   template<typename T>
   T& remove_component() {
     return this->scene->remove_component<T>(this->id);
+  }
+
+  void kill() {
+    this->scene->destroy_entity(this->id);
+    this->id = (entt::entity)(0);
+    this->scene = nullptr;
   }
 
   operator bool() const {

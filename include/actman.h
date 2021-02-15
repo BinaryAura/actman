@@ -10,12 +10,11 @@ class ActMan : public Application {
 public:
   virtual void parse(std::vector<std::string> argv) override;
   virtual void configure() override;
-  virtual const char* usage() const override;
-  virtual void reset();
+  virtual const std::string usage() const override;
+  virtual void reset() override;
 protected:
-  virtual const char* print_help() const override;
+  virtual const std::string print_help() const override;
 
-  TilePhysics engine;
   BoardConfig config;
   std::filesystem::path config_file;
   std::filesystem::path output_file;

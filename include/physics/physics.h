@@ -1,9 +1,15 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
+#include "components/transform.h"
+#include "components/mobile.h"
+#include "components/collider.h"
+
+class Scene;
 
 class Physics {
-  // virtual void on_update(Transform transform, PhysicsComponent physics) = 0;
+public:
+  virtual void on_update(Scene&, Transform&, Mobile&, Collider&) = 0;
 };
 
 #endif // PHYSICS_H

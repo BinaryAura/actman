@@ -35,7 +35,7 @@ public:
     while(this->running) {
       // Todo: process_events();
       this->scene.on_input();
-      this->scene.on_update(this->physics);
+      this->scene.on_update();
       #ifndef NORENDER
         this->scene.on_render(this->window);
         this->window->on_update();
@@ -54,7 +54,7 @@ public:
       if(this->running) this->configure();
     } catch (const ArgError& err) {
       fprintf(stderr, "%s: '%s'\n", err.what(), err.arg);
-      fprintf(stderr, "actman %s", this->usage());
+      fprintf(stderr, "actman %s", this->usage().c_str());
       exit(err.id);
     } catch (const ConfigError& err) {
       fprintf(stderr, "%s: %s:%d:", err.what(), err.file.c_str(), err.line);
@@ -72,10 +72,10 @@ public:
     this->reset();
   }
   virtual void reset() = 0;
-  virtual const char* usage() const { return ""; }
+  virtual const std::string usage() const { return ""; }
 
 protected:
-  virtual const char* print_help() const { return ""; }
+  virtual const std::string print_help() const { return ""; }
   // void on_input();
   // void on_update();
   // void on_render();
@@ -83,8 +83,6 @@ protected:
   bool running = true;
   Scene scene;
   Window *window;
-  Physics *physics;
-  Renderer *renderer;
   spdlog::level::level_enum core_level = CORE_DEF_LVL;
   spdlog::level::level_enum client_level = CLIENT_DEF_LVL;
 };

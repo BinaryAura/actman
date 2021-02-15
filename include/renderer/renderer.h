@@ -8,6 +8,7 @@
 class Renderer {
 public:
   Renderer() = default;
+  virtual void clear(Window*) const = 0;
   virtual void on_update(Window*, Transform&, Sprite&) const = 0;
 };
 

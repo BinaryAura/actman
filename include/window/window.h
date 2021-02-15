@@ -17,6 +17,8 @@ public:
   virtual void on_update() = 0;
   virtual uint32_t get_width() const = 0;
   virtual uint32_t get_height() const = 0;
+  virtual float get_fps() const = 0;
+  virtual void set_fps(const float) = 0;
 
   // Todo: set_event_callback
   // Todo: set vsync
