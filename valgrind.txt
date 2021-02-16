@@ -1,36 +1,36 @@
-==2922975== Memcheck, a memory error detector
-==2922975== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==2922975== Using Valgrind-3.16.1 and LibVEX; rerun with -h for copyright info
-==2922975== Command: bin/Debug/actman/actman test/input.txt
-==2922975== Parent PID: 2921356
-==2922975== 
-==2922975== 
-==2922975== Process terminating with default action of signal 6 (SIGABRT): dumping core
-==2922975==    at 0x4C697D5: raise (in /usr/lib64/libc-2.31.so)
-==2922975==    by 0x4C52894: abort (in /usr/lib64/libc-2.31.so)
-==2922975==    by 0x4C52768: __assert_fail_base.cold (in /usr/lib64/libc-2.31.so)
-==2922975==    by 0x4C61E85: __assert_fail (in /usr/lib64/libc-2.31.so)
-==2922975==    by 0x46F482: entt::basic_sparse_set<entt::entity>::index(entt::entity) const (entt.hpp:5238)
-==2922975==    by 0x479CFB: entt::basic_storage<entt::entity, Memory<Transform>, void>::get(entt::entity) const (entt.hpp:7464)
-==2922975==    by 0x4778C2: entt::basic_storage<entt::entity, Memory<Transform>, void>::get(entt::entity) (entt.hpp:7469)
-==2922975==    by 0x477716: decltype(auto) entt::basic_registry<entt::entity>::get<Memory<Transform> >(entt::entity) (entt.hpp:15535)
-==2922975==    by 0x47769E: Memory<Transform>& Scene::get_component<Memory<Transform> >(entt::entity&) (scene.h:29)
-==2922975==    by 0x40BA6B: Memory<Transform>& Entity::get_component<Memory<Transform> >() (entity.h:25)
-==2922975==    by 0x408947: runky_ai(Scene&, Entity) (actman.cpp:300)
-==2922975==    by 0x4A3A6B: Scene::on_input() (scene.cpp:28)
-==2922975== 
-==2922975== HEAP SUMMARY:
-==2922975==     in use at exit: 134,265 bytes in 481 blocks
-==2922975==   total heap usage: 611 allocs, 130 frees, 233,708 bytes allocated
-==2922975== 
-==2922975== LEAK SUMMARY:
-==2922975==    definitely lost: 0 bytes in 0 blocks
-==2922975==    indirectly lost: 0 bytes in 0 blocks
-==2922975==      possibly lost: 0 bytes in 0 blocks
-==2922975==    still reachable: 134,265 bytes in 481 blocks
-==2922975==         suppressed: 0 bytes in 0 blocks
-==2922975== Reachable blocks (those to which a pointer was found) are not shown.
-==2922975== To see them, rerun with: --leak-check=full --show-leak-kinds=all
-==2922975== 
-==2922975== For lists of detected and suppressed errors, rerun with: -s
-==2922975== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==2993881== Memcheck, a memory error detector
+==2993881== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2993881== Using Valgrind-3.16.1 and LibVEX; rerun with -h for copyright info
+==2993881== Command: bin/Debug/actman/actman test/input.txt
+==2993881== Parent PID: 2988302
+==2993881== 
+==2993881== 
+==2993881== Process terminating with default action of signal 6 (SIGABRT): dumping core
+==2993881==    at 0x4C697D5: raise (in /usr/lib64/libc-2.31.so)
+==2993881==    by 0x4C52894: abort (in /usr/lib64/libc-2.31.so)
+==2993881==    by 0x4C52768: __assert_fail_base.cold (in /usr/lib64/libc-2.31.so)
+==2993881==    by 0x4C61E85: __assert_fail (in /usr/lib64/libc-2.31.so)
+==2993881==    by 0x470834: entt::basic_sparse_set<entt::entity>::emplace(entt::entity) (entt.hpp:5252)
+==2993881==    by 0x47F7DB: Tag& entt::basic_storage<entt::entity, Tag, void>::emplace<char const (&) [7]>(entt::entity, char const (&) [7]) (entt.hpp:7497)
+==2993881==    by 0x47F73C: decltype(auto) entt::storage_adapter_mixin<entt::basic_storage<entt::entity, Tag, void> >::emplace<char const (&) [7]>(entt::basic_registry<entt::entity>&, entt::entity, char const (&) [7]) (entt.hpp:7683)
+==2993881==    by 0x47F6BF: decltype(auto) entt::sigh_storage_mixin<entt::storage_adapter_mixin<entt::basic_storage<entt::entity, Tag, void> > >::emplace<char const (&) [7]>(entt::basic_registry<entt::entity>&, entt::entity, char const (&) [7]) (entt.hpp:7824)
+==2993881==    by 0x47F665: decltype(auto) entt::basic_registry<entt::entity>::emplace<Tag, char const (&) [7]>(entt::entity, char const (&) [7]) (entt.hpp:15266)
+==2993881==    by 0x47F5BF: Tag& Scene::add_component<Tag, char const (&) [7]>(entt::entity&, char const (&) [7]) (scene.h:24)
+==2993881==    by 0x40E68B: Tag& Entity::add_component<Tag, char const (&) [7]>(char const (&) [7]) (entity.h:20)
+==2993881==    by 0x406DFD: ActMan::reset() (actman.cpp:125)
+==2993881== 
+==2993881== HEAP SUMMARY:
+==2993881==     in use at exit: 137,489 bytes in 476 blocks
+==2993881==   total heap usage: 593 allocs, 117 frees, 236,132 bytes allocated
+==2993881== 
+==2993881== LEAK SUMMARY:
+==2993881==    definitely lost: 0 bytes in 0 blocks
+==2993881==    indirectly lost: 0 bytes in 0 blocks
+==2993881==      possibly lost: 0 bytes in 0 blocks
+==2993881==    still reachable: 137,489 bytes in 476 blocks
+==2993881==         suppressed: 0 bytes in 0 blocks
+==2993881== Reachable blocks (those to which a pointer was found) are not shown.
+==2993881== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==2993881== 
+==2993881== For lists of detected and suppressed errors, rerun with: -s
+==2993881== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

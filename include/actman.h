@@ -12,14 +12,12 @@ public:
   virtual void configure() override;
   virtual const std::string usage() const override;
   virtual void reset() override;
+  virtual void close() override;
 protected:
   virtual const std::string print_help() const override;
-  static void punky_ai(Scene&, Entity);
-  static void bunky_ai(Scene&, Entity);
-  static void dunky_ai(Scene&, Entity);
-  static void runky_ai(Scene&, Entity);
 
-  static BoardConfig config;
+  entt::entity actman;
+  BoardConfig config;
   std::filesystem::path config_file;
   std::filesystem::path output_file;
 };
