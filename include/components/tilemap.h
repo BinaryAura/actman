@@ -15,7 +15,7 @@ struct TileMap {
   uint32_t rows;
 
   uint32_t distance(const Transform& lhs, const Transform& rhs) const {
-    return abs(lhs.x - rhs.x) + (lhs.y + rhs.y);
+    return abs(lhs.x - rhs.x) + (lhs.y - rhs.y);
   }
 
   std::vector<Transform> get_neighbors(Transform& transform) const {
