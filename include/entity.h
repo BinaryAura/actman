@@ -30,6 +30,10 @@ public:
     return this->scene->remove_component<T>(this->id);
   }
 
+  entt::entity get_id() {
+    return this->id;
+  }
+
   void kill() {
     this->scene->destroy_entity(this->id);
     this->id = (entt::entity)(0);
@@ -37,7 +41,7 @@ public:
   }
 
   operator bool() const {
-    return (uint32_t)this->id != 0;
+    return (uint32_t)(this->id) != 0;
   }
 
 private:

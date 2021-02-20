@@ -1,7 +1,15 @@
+# Generated Files
 cmake-build-debug/
 bin/
 build/
 lib/
 test/
-*.make
+logs/
+
+# Premake
 Makefile
+*.make
+
+# Valgrind
+valgrind.*
+vgcore.*

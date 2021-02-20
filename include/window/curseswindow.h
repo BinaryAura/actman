@@ -8,8 +8,6 @@
 
 using RawCursesWindow = WINDOW;
 
-static bool curses_initialized = false;
-
 // Todo: error callback
 
 class CursesWindow : public Window {
@@ -42,6 +40,10 @@ public:
   inline void set_fps(const float fps) override {
     this->fps = fps;
   }
+
+protected:
+  static uint32_t n_windows;
+  static bool curses_initialized;
 private:
   void shutdown();
   float fps = 60;

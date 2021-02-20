@@ -2,17 +2,21 @@
 #define SCENE_H
 
 #include <entt.hpp>
+#include "log.h"
 #include "window/window.h"
 #include "physics/tilephysics.h"
 #include "renderer/cursesrenderer.h"
 
 class Entity;
+class Application;
 
 class Scene {
 public:
   Scene();
 
   Entity create_entity();
+
+  bool is_valid(entt::entity& entity);
 
   template<typename T>
   bool has_component(entt::entity& entity) {
@@ -21,6 +25,7 @@ public:
 
   template<typename T, typename ... Args>
   T& add_component(entt::entity& entity, Args&& ... args) {
+    Log::get_core_logger()->trace("Adding component to Entity {}: {}", entity, typeid(T).name());
     return this->registry.emplace<T>(entity, std::forward<Args>(args) ...);
   }
 
@@ -69,7 +74,9 @@ public:
     return fg;
   }
 
-  void on_input();
+  void clear();
+
+  void on_input(Application*);
 
   void on_update();
 

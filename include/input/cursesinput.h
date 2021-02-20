@@ -7,6 +7,7 @@
 class CursesInput : public Input {
 public:
   CursesInput();
+  ~CursesInput();
 protected:
   virtual bool _is_key_pressed(int32_t keycode) override;
   // Todo: raw mouse button pressed

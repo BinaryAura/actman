@@ -3,6 +3,8 @@
 
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
 
 class Log {
 public:
@@ -18,6 +20,7 @@ public:
     }
 
 private:
+    static std::vector<spdlog::sink_ptr> sinks;
     static std::shared_ptr<spdlog::logger> core_logger;
     static std::shared_ptr<spdlog::logger> client_logger;
 };
