@@ -3,7 +3,6 @@ cmake-build-debug/
 bin/
 build/
 lib/
-test/
 logs/
 
 # Premake
