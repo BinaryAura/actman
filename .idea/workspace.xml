@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" ENABLED="true" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="050dfb6d-c91a-4e8f-aed8-1581e080ac2d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/csv-plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deps/spdlog" beforeDir="false" afterPath="$PROJECT_DIR$/deps/spdlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/actman.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/actman.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/application.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/application.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/components/ai.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/components/ai.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/log.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/log.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/scene.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/scene.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/window/curseswindow.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/window/curseswindow.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actman.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/actman.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/input/cursesinput.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/input/cursesinput.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/log.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/log.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics/tilephysics.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/physics/tilephysics.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/scene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/window/curseswindow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/window/curseswindow.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/valgrind.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/valgrind.txt.core.2816059" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/valgrind.txt.core.2922399" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/valgrind.txt.core.2922975" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/valgrind.txt.core.2990081" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/valgrind.txt.core.2993881" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vgcore.2815656" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="cfr1ll0z" />
+  </component>
+  <component name="ProjectId" id="1of2mB1RuTt81xCfPYYN9oo5hQN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/run.sh" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="run.sh" type="ShConfigurationType">
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/run.sh" />
+      <option name="SCRIPT_OPTIONS" value="test/input.txt" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="050dfb6d-c91a-4e8f-aed8-1581e080ac2d" name="Default Changelist" comment="" />
+      <created>1613663484374</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1613663484374</updated>
+      <workItem from="1613663486164" duration="561000" />
+      <workItem from="1613664061781" duration="5195000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
