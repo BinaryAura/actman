@@ -1,0 +1,6 @@
+#ifndef ACTMAN_COMMON_H
+#define ACTMAN_COMMON_H
+
+enum class Ghost {PUNKY, BUNKY, DUNKY, RUNKY, NUM_GHOSTS};
+
+#endif // ACTMAN_COMMON_H

@@ -1,2 +1,15 @@
-a.out
+# Generated Files
+cmake-build-debug/
+bin/
+build/
+lib/
+test/
+logs/
 
+# Premake
+Makefile
+*.make
+
+# Valgrind
+valgrind.*
+vgcore.*

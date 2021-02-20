@@ -1,0 +1,6 @@
+[submodule "deps/spdlog"]
+	path = deps/spdlog
+	url = git@github.com:BinaryAura/spdlog.git
+[submodule "deps/entt"]
+	path = deps/entt
+	url = git@github.com:skypjack/entt.git
