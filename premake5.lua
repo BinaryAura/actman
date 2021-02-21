@@ -7,12 +7,8 @@ out_dir = "%{wks.location}/"
 out_struct = "%{cfg.buildcfg}/"
 
 include_dirs = {}
-include_dirs["spdlog"] = "deps/spdlog/include"
-include_dirs["entt"] = "deps/entt/single_include/entt"
 
-
-include "deps/spdlog"
-
+include "deps" -- include dependencies
 
 project "actman"
   kind "ConsoleApp"
