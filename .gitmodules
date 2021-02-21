@@ -1,3 +1,0 @@
-[submodule "deps/hadron-engine"]
-	path = deps/hadron-engine
-	url = https://github.com/BinaryAura/hadron-engine.git
