@@ -1,7 +1,7 @@
-DRRURLULLRRDULLDDRRURRDRRR
-25
+DRRUR
+18
 ###########
-#   # ... #
-# #   ###*#
-#D  #  PXB#
+#...# ... #
+# # AR###D#
+#   # B.. #
 ###########

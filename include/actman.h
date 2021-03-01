@@ -19,6 +19,10 @@ public:
   virtual const std::string usage() const override;
   virtual void reset() override;
   virtual const std::string print_help() const override;
+
+  const int32_t get_winning_score() const {
+    return this->winning_score;
+  }
 protected:
   virtual void on_close() override;
 
@@ -26,6 +30,8 @@ protected:
   BoardConfig config;
   std::filesystem::path config_file;
   std::filesystem::path output_file;
+  int32_t winning_score = -1;
+  bool tick_debug = false;
 private:
   void create_board();
   void spawn_wall(const uint32_t x, const uint32_t y);

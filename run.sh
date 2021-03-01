@@ -13,4 +13,4 @@ make
 if [ $? != 0 ]; then
   exit
 fi
-bin/$CONFIG/${PROJECT}/${PROJECT} -v $1 $2
+bin/$CONFIG/${PROJECT}/${PROJECT} -v $1 $2 -w 16

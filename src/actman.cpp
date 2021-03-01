@@ -44,6 +44,13 @@ void ActMan::parse(std::vector<std::string> argv) {
             opt++;
             this->ticks = std::stoi(*opt);
             break;
+          case 'd': // debug
+            this->tick_debug = true;
+            break;
+          case 'w': // win condition (score to win)
+            opt++;
+            this->winning_score = std::stoi(*opt);
+            break;
           default:
             throw NoOptError(&(*opt)[1]);
         }
@@ -140,6 +147,7 @@ void ActMan::configure() {
   this->scene.add_renderer(new CursesRenderer());
   this->window = Window::create({"ActMan", this->config.cols + 2, this->config.rows + 2});
   this->window->set_fps(4);
+  this->window->set_tick_debug(this->tick_debug);
 }
 
 void ActMan::create_board() {
@@ -340,10 +348,13 @@ void ActMan::spawn_actman(const uint32_t x, const uint32_t y) {
         entity.kill();
       }
     }
-    auto treasures = scene.filtered_view<TagComponent>([tag](Entity entity){
-      return tag.name == "Gold Nugget" || tag.name == "Gold Bar" || tag.name == "Diamond";
+    auto treasures = scene.filtered_view<TagComponent>([](Entity entity){
+      auto& tag = entity.get_component<TagComponent>().name;
+      return tag == "Gold Nugget" || tag == "Gold Bar" || tag == "Diamond";
     });
-    if(treasures.size()) {
+    if(treasures.empty() || ((ActMan*)app)->get_winning_score() >= 0 && ((ActMan*)app)->get_winning_score() <= score.value) {
+      Log::get_client_logger()->trace("{}, {}", treasures.size(), treasures.empty());
+      Log::get_client_logger()->trace("score: {}, goal: {}", score.value, ((ActMan*)app)->get_winning_score());
       Log::get_client_logger()->info("ActMan Won the game");
       app->close();
     }
