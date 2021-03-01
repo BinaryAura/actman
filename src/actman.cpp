@@ -16,6 +16,7 @@
 #include "components/movelog.h"
 #include "components/dunkymemory.h"
 #include "components/runkymemory.h"
+#include "components/pathmap.h"
 
 Application* create(const int32_t argc, const char** argv) {
   return new ActMan(argc, argv);
@@ -149,6 +150,7 @@ void ActMan::create_board() {
   entity.add_component<TileMapComponent>(this->config.rows, this->config.cols);
   entity.add_component<Score>(0);
   entity.add_component<MoveLog>();
+  entity.add_component<PathMap>();
   entity.add_component<InputComponent>([](Application* app, Entity entity){
     if(Input::is_key_pressed(BA_KEY_Q)) {
       // quit
@@ -207,54 +209,116 @@ void ActMan::spawn_actman(const uint32_t x, const uint32_t y) {
     Log::get_client_logger()->trace("Seed: {}", seed);
     rng.seed(seed);
     auto &tag = entity.get_component<TagComponent>();
-    auto &tilemap = app->get_scene().get_entity("Board").get_component<TileMapComponent>();
+    auto &scene = app->get_scene();
+    auto &tilemap = scene.get_entity("Board").get_component<TileMapComponent>();
+    auto &pathmap = scene.get_entity("Board").get_component<PathMap>();
 
     // Find valid moves
     auto free = tilemap.get_neighbors(entity.get_component<TransformComponent>());
     std::vector<TransformComponent> actions;
+    std::vector<TransformComponent> safe_actions;
     for(auto neighbor : free) {
       bool accessable = true;
+      bool safe = true;
       for(auto entity : tilemap.get_entities(app->get_scene(), neighbor)) {
-        if(entity.get_component<TagComponent>().name == "Wall") {
+        auto &tag = entity.get_component<TagComponent>().name;
+        if(tag == "Wall") {
           accessable = false;
+        }
+        if(tag == "Punky" || tag == "Bunky" || tag == "Dunky" || tag == "Runky") {
+          safe = false;
         }
       }
       if(accessable) {
         actions.push_back(neighbor);
+        if(safe) {
+          safe_actions.push_back(neighbor);
+        }
       }
     }
     auto& transform = entity.get_component<TransformComponent>();
     auto& move = entity.get_component<TileMoveComponent>();
     bool found = false;
 
-    auto &target = actions[(rng() - 1) % actions.size()];
+    auto path = pathmap.bfs(scene, glm::vec3(transform), [tilemap](Scene& scene, PathMap::Node* node) -> bool {
+      auto entities = tilemap.get_entities(scene, node->transform);
+      Log::get_client_logger()->trace("Checking entities on ({}, {})", node->transform.x, node->transform.y);
+      for(auto entity : entities) {
+        auto &tag = entity.get_component<TagComponent>().name;
+        Log::get_client_logger()->trace("({}, {}): {}", node->transform.x, node->transform.y, tag);
+        if(tag == "Diamond" || tag == "Gold Bar") {
+          Log::get_client_logger()->trace("Found target!");
+          return true;
+        }
+      }
+      Log::get_client_logger()->trace("Nothing here");
+      return false;
+    }, [tilemap](Scene& scene, PathMap::Node* node) -> bool {
+      Log::get_client_logger()->trace("Checking entities on ({}, {})", node->transform.x, node->transform.y);
+      auto entities = tilemap.get_entities(scene, node->transform);
+      for(auto entity : entities) {
+        auto &tag = entity.get_component<TagComponent>().name;
+        Log::get_client_logger()->trace("({}, {}): {}", node->transform.x, node->transform.y, tag);
+        if(tag == "Punky" || tag == "Bunky" || tag == "Dunky" || tag == "Runky") {
+          Log::get_client_logger()->trace("Found enemy!");
+          return true;
+        }
+      }
+      Log::get_client_logger()->trace("Safe here");
+      return false;
+    });
 
-
-    for(int i = 0; i < 4; i++) {
-      Log::get_client_logger()->trace("({}, {}) -> ({}, {})", glm::vec3(transform).x, glm::vec3(transform).y, glm::vec3(target).x, glm::vec3(target).y);
-      auto &target = actions[(rng() - 1) % actions.size()];
+    if(path.empty()) {
+      path = pathmap.bfs(scene, glm::vec3(transform), [tilemap](Scene& scene, PathMap::Node* node) -> bool {
+        auto entities = tilemap.get_entities(scene, node->transform);
+        Log::get_client_logger()->trace("Checking entities on ({}, {})", node->transform.x, node->transform.y);
+        for(auto entity : entities) {
+          auto &tag = entity.get_component<TagComponent>().name;
+          Log::get_client_logger()->trace("({}, {}): {}", node->transform.x, node->transform.y, tag);
+          if(tag == "Gold Nugget") {
+            Log::get_client_logger()->trace("Found target!");
+            return true;
+          }
+        }
+        Log::get_client_logger()->trace("Nothing here");
+        return false;
+      }, [tilemap](Scene& scene, PathMap::Node* node) -> bool {
+        Log::get_client_logger()->trace("Checking entities on ({}, {})", node->transform.x, node->transform.y);
+        auto entities = tilemap.get_entities(scene, node->transform);
+        for(auto entity : entities) {
+          auto &tag = entity.get_component<TagComponent>().name;
+          Log::get_client_logger()->trace("({}, {}): {}", node->transform.x, node->transform.y, tag);
+          if(tag == "Punky" || tag == "Bunky" || tag == "Dunky" || tag == "Runky") {
+            Log::get_client_logger()->trace("Found enemy!");
+            return true;
+          }
+        }
+        Log::get_client_logger()->trace("Safe here");
+        return false;
+      });
     }
 
     // Update move
-    move.x = glm::vec3(target).x;
-    move.y = glm::vec3(target).y;
-
-    // Update rotation
-    uint32_t dx = move.x - glm::vec3(transform).x;
-    uint32_t dy = move.y - glm::vec3(transform).y;
-    if (dx == 0) {
-      if (dy == -1) {
-        transform.rotation.z = 0;
-      } else {
-        transform.rotation.z = 180;
-      }
-    } else if (dx == 1) {
-      transform.rotation.z = 90;
-    } else {
-      transform.rotation.z = 270;
+    if(!path.empty()) { // Path Found!
+      path.pop(); // pop of current;
+      move.x = path.front()->transform.x;
+      move.y = path.front()->transform.y;
+    } else if(!safe_actions.empty()) { // Move to "safe" (Doesn't check if Ghost could move to tile) tile
+      move.x = glm::vec3(safe_actions.front()).x;
+      move.y = glm::vec3(safe_actions.front()).y;
+    } else { // ActMan is Doomed
+      move.x = glm::vec3(actions.front()).x;
+      move.y = glm::vec3(actions.front()).y;
     }
 
+    // Update rotation
+    int32_t dx = move.x - glm::vec3(transform).x;
+    int32_t dy = move.y - glm::vec3(transform).y;
+
+    transform.rotation.z = (std::abs(dx)*(2-dx) + std::abs(dy)*(dy+1))*90;
+
     auto &move_log = app->get_scene().get_entity("Board").get_component<MoveLog>().moves;
+
     move_log.emplace_back(transform.rotation.z);
 
     // Pick up Treasure and update score
@@ -275,6 +339,13 @@ void ActMan::spawn_actman(const uint32_t x, const uint32_t y) {
         score.value += 10;
         entity.kill();
       }
+    }
+    auto treasures = scene.filtered_view<TagComponent>([tag](Entity entity){
+      return tag.name == "Gold Nugget" || tag.name == "Gold Bar" || tag.name == "Diamond";
+    });
+    if(treasures.size()) {
+      Log::get_client_logger()->info("ActMan Won the game");
+      app->close();
     }
   });
 }
@@ -507,19 +578,9 @@ void ActMan::spawn_bunky(const uint32_t x, const uint32_t y) {
     move.y = glm::vec3(choice).y;
 
     // Update Rotation
-    uint32_t dx = glm::vec3(choice).x - glm::vec3(transform).x;
-    uint32_t dy = glm::vec3(choice).y - glm::vec3(transform).y;
-    if (dx == 0) {
-      if (dy == -1) {
-        transform.rotation.z = 0;
-      } else {
-        transform.rotation.z = 180;
-      }
-    } else if (dx == 1) {
-      transform.rotation.z = 90;
-    } else {
-      transform.rotation.z = 270;
-    }
+    int32_t dx = glm::vec3(choice).x - glm::vec3(transform).x;
+    int32_t dy = glm::vec3(choice).y - glm::vec3(transform).y;
+    transform.rotation.z = (std::abs(dx)*(2-dx) + std::abs(dy)*(dy+1))*90;
 
     // Kill ActMan if he moves onto the same tile as Bunky
     if(amv.x == move.x && amv.y == move.y) {
@@ -642,19 +703,9 @@ void ActMan::spawn_dunky(const uint32_t x, const uint32_t y) {
     move.y = glm::vec3(choice).y;
 
     // Update Rotation
-    uint32_t dx = glm::vec3(choice).x - glm::vec3(transform).x;
-    uint32_t dy = glm::vec3(choice).y - glm::vec3(transform).y;
-    if (dx == 0) {
-      if (dy == -1) {
-        transform.rotation.z = 0;
-      } else {
-        transform.rotation.z = 180;
-      }
-    } else if (dx == 1) {
-      transform.rotation.z = 90;
-    } else {
-      transform.rotation.z = 270;
-    }
+    int32_t dx = glm::vec3(choice).x - glm::vec3(transform).x;
+    int32_t dy = glm::vec3(choice).y - glm::vec3(transform).y;
+    transform.rotation.z = (std::abs(dx)*(2-dx) + std::abs(dy)*(dy+1))*90;
 
     // Kill ActMan if he moves onto the same tile as Dunky
     if(amv.x == move.x && amv.y == move.y) {
@@ -782,19 +833,9 @@ void ActMan::spawn_runky(const uint32_t x, const uint32_t y) {
 
 
     // Update Rotation
-    uint32_t dx = glm::vec3(choice).x - glm::vec3(transform).x;
-    uint32_t dy = glm::vec3(choice).y - glm::vec3(transform).y;
-    if (dx == 0) {
-      if (dy == -1) {
-        transform.rotation.z = 0;
-      } else {
-        transform.rotation.z = 180;
-      }
-    } else if (dx == 1) {
-      transform.rotation.z = 90;
-    } else {
-      transform.rotation.z = 270;
-    }
+    int32_t dx = glm::vec3(choice).x - glm::vec3(transform).x;
+    int32_t dy = glm::vec3(choice).y - glm::vec3(transform).y;
+    transform.rotation.z = (std::abs(dx)*(2-dx) + std::abs(dy)*(dy+1))*90;
 
     // Kill ActMan if he moves onto the same tile as Runky
     if(amv.x == move.x && amv.y == move.y) {
@@ -814,6 +855,7 @@ void ActMan::reset() {
   this->scene.clear();
   uint32_t y = 1, x = 1;
   this->create_board();
+  auto& pathmap = this->scene.get_entity("Board").get_component<PathMap>();
   for(auto line : this->config.init_state) {
     for(auto cell : line) {
       switch(cell) {
@@ -822,32 +864,58 @@ void ActMan::reset() {
           break;
         case '.': // Gold Nugget
           this->spawn_nugget(x, y);
+          pathmap.add_node({x, y, 0});
           break;
         case '$': // Gold Bar
           this->spawn_bar(x, y);
+          pathmap.add_node({x, y, 0});
           break;
         case '*': // Diamond
           this->spawn_diamond(x, y);
+          pathmap.add_node({x, y, 0});
           break;
         case 'A': // ActMan
           this->spawn_actman(x, y);
+          pathmap.add_node({x, y, 0});
           break;
         case 'P': // Punky
           this->spawn_punky(x, y);
+          pathmap.add_node({x, y, 0});
           break;
         case 'B': // Bunky
           this->spawn_bunky(x, y);
+          pathmap.add_node({x, y, 0});
           break;
         case 'D': // Dunky
           this->spawn_dunky(x, y);
+          pathmap.add_node({x, y, 0});
           break;
         case 'R': // Runky
           this->spawn_runky(x, y);
+          pathmap.add_node({x, y, 0});
+          break;
+        default: // nothing
+          pathmap.add_node({x, y, 0});
           break;
       }
       x++;
     }
     x = 1;
     y++;
+  }
+  for(auto i = pathmap.nodes.begin(); i != pathmap.nodes.end(); i++) {
+    // Log::get_client_logger()->trace("({}, {})", i->transform.x, i->transform.y);
+    for(auto j = i; j != pathmap.nodes.end(); j++) {
+      if(j == i) {
+        continue;
+      }
+      // Log::get_client_logger()->trace("({}, {})", j->transform.x, j->transform.y);
+      // Log::get_client_logger()->trace("{}", std::sqrt(std::pow(i->transform.x - j->transform.x,2) + std::pow(i->transform.y - j->transform.y,2)));
+      if(std::sqrt(std::pow(i->transform.x - j->transform.x,2) + std::pow(i->transform.y - j->transform.y,2)) <= 1) {
+        // Log::get_client_logger()->trace("({}, {}) <-> ({}, {})", i->transform.x, i->transform.y, j->transform.x, j->transform.y);
+        i->neighbors.push_back(&(*j));
+        j->neighbors.push_back(&(*i));
+      }
+    }
   }
 }
