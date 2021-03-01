@@ -1,11 +1,12 @@
-Puzzle Assignment #1
+Puzzle Assignment #2
 
-Information about this puzzle assignment is at: https://mst.instructure.com/courses/58110/assignments/254415
+Information about this puzzle assignment is at:
+https://mst.instructure.com/courses/58110/assignments/255840
 
 IMPORTANT:
 
 1)
-Modify the provided sample bash script 'run.sh' to suit your needs. 
+Modify the provided sample bash script 'run.sh' to suit your needs.
 
 2)
 Modify the sample '.gitignore' file to ignore any binary files.
@@ -19,6 +20,5 @@ git commit -m "meaningful commit message"
 git push
 
 4)
-When you are ready, modify the content of the "ReadyForGrading.txt" file to "Yes". 
-This is how you will indicate to the graders that your assignment is ready to be graded. 
-
+When you are ready, modify the content of the "ReadyForGrading.txt" file to "Yes".
+This is how you will indicate to the graders that your assignment is ready to be graded.
