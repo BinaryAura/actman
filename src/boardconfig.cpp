@@ -1,10 +1,10 @@
-#include <stdio.h>
+// #include <stdio.h>
 #include <fstream>
-#include <iostream>
-#include <math.h>
+// #include <iostream>
+// #include <math.h>
 
-#include "error.h"
-#include "board/boardconfig.h"
+#include <hadron/error.h>
+#include "boardconfig.h"
 
 BoardConfig::BoardConfig(std::filesystem::path config_file) {
   this->load_config(config_file);
@@ -79,7 +79,7 @@ void BoardConfig::load_config(std::filesystem::path config_file) {
       throw ConfigError(config_file, l, -1, std::to_string(x).c_str());
     if(y < 0)
       throw ConfigError(config_file, l, -1, std::to_string(y).c_str());
-    add_to_patrol({x, y});
+    add_to_patrol({x + 1, y + 1});
   }
   config.ignore();
   l++;
