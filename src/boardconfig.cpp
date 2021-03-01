@@ -79,7 +79,7 @@ void BoardConfig::load_config(std::filesystem::path config_file) {
       throw ConfigError(config_file, l, -1, std::to_string(x).c_str());
     if(y < 0)
       throw ConfigError(config_file, l, -1, std::to_string(y).c_str());
-    add_to_patrol({x, y});
+    add_to_patrol({x + 1, y + 1});
   }
   config.ignore();
   l++;

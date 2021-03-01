@@ -11,6 +11,20 @@
 struct PathMap {
   struct Node {
 
+    void add_neighbor(PathMap::Node* neighbor) {
+      if(neighbor == nullptr) {
+        Log::get_core_logger()->error("neighbor is null");
+        return;
+      }
+      this->neighbors.push_back(neighbor);
+    }
+
+    void add_neighbors(const std::vector<PathMap::Node*>& neighbors) {
+      for(auto neighbor : neighbors) {
+        this->add_neighbor(neighbor);
+      }
+    }
+
     glm::vec3 transform; // Necessary for empty locations
     std::list<PathMap::Node*> neighbors;
     bool visited;

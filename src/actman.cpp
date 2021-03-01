@@ -324,6 +324,7 @@ void ActMan::spawn_actman(const uint32_t x, const uint32_t y) {
     int32_t dy = move.y - glm::vec3(transform).y;
 
     transform.rotation.z = (std::abs(dx)*(2-dx) + std::abs(dy)*(dy+1))*90;
+    Log::get_client_logger()->trace("dx: {}, dy: {}, rotation: {}", dx, dy, transform.rotation.z);
 
     auto &move_log = app->get_scene().get_entity("Board").get_component<MoveLog>().moves;
 
@@ -565,15 +566,17 @@ void ActMan::spawn_bunky(const uint32_t x, const uint32_t y) {
         break;
       default: // Bunky Rule
         TransformComponent target;
-        auto tdir = ((int32_t)(target.rotation.z + 45) % 360 / 90); // Get direction of ActMan
-        target.transform.x = amv.x - (tdir & 2)*(tdir - 2)*4;
+        auto tdir = ((int32_t)(at.rotation.z + 45) % 360 / 90); // Get direction of ActMan
+        Log::get_client_logger()->trace("amv: ({}, {})", amv.x, amv.y);
+        Log::get_client_logger()->trace("arot: {}, tdir: {}, dx: {}, dy: {}", target.rotation.z, tdir, -(tdir % 2)*(tdir -2)*4, (1 - (tdir % 2))*(tdir - 1)*4);
+        target.transform.x = amv.x - (tdir % 2)*(tdir - 2)*4;
         target.transform.y = amv.y + (1 - (tdir % 2))*(tdir - 1)*4;
         Log::get_client_logger()->trace("target: ({}, {})", glm::vec3(target).x, glm::vec3(target).y);
-        int32_t dist = -1;
+        float dist = -1;
         for(auto m : actions) {
-          int32_t d = tilemap.distance(target, m);
+          float d = tilemap.distance(target, m);
           Log::get_client_logger()->trace("({}, {}) -> ({}, {}) d: {}", glm::vec3(target).x, glm::vec3(target).y, glm::vec3(m).x, glm::vec3(m).y, d);
-          if(d < dist || dist == -1) {
+          if(d < dist || dist < 0) {
             choice.transform.x = glm::vec3(m).x;
             choice.transform.y = glm::vec3(m).y;
             dist = d;
@@ -693,12 +696,12 @@ void ActMan::spawn_dunky(const uint32_t x, const uint32_t y) {
         TransformComponent target;
         target.transform.x = patrol[next].x;
         target.transform.y = patrol[next].y;
-        Log::get_client_logger()->trace("target: ({}, {})", amv.x, amv.y);
-        int32_t dist = -1;
+        Log::get_client_logger()->trace("target: ({}, {})", target.transform.x, target.transform.y);
+        float dist = -1;
         for(auto m : actions) {
-          int32_t d = tilemap.distance(target, m);
+          float d = tilemap.distance(target, m);
           Log::get_client_logger()->trace("({}, {}) -> ({}, {}) d: {}", glm::vec3(transform).x, glm::vec3(transform).y, glm::vec3(m).x, glm::vec3(m).y, d);
-          if(d < dist || dist == -1) {
+          if(d < dist || dist < 0) {
             choice.transform.x = glm::vec3(m).x;
             choice.transform.y = glm::vec3(m).y;
             dist = d;
@@ -914,18 +917,17 @@ void ActMan::reset() {
     x = 1;
     y++;
   }
-  for(auto i = pathmap.nodes.begin(); i != pathmap.nodes.end(); i++) {
-    // Log::get_client_logger()->trace("({}, {})", i->transform.x, i->transform.y);
-    for(auto j = i; j != pathmap.nodes.end(); j++) {
-      if(j == i) {
-        continue;
-      }
-      // Log::get_client_logger()->trace("({}, {})", j->transform.x, j->transform.y);
-      // Log::get_client_logger()->trace("{}", std::sqrt(std::pow(i->transform.x - j->transform.x,2) + std::pow(i->transform.y - j->transform.y,2)));
-      if(std::sqrt(std::pow(i->transform.x - j->transform.x,2) + std::pow(i->transform.y - j->transform.y,2)) <= 1) {
-        // Log::get_client_logger()->trace("({}, {}) <-> ({}, {})", i->transform.x, i->transform.y, j->transform.x, j->transform.y);
-        i->neighbors.push_back(&(*j));
-        j->neighbors.push_back(&(*i));
+
+  auto& tilemap = this->scene.get_entity("Board").get_component<TileMapComponent>();
+
+  Log::get_client_logger()->trace("Generating Edges for pathmap");
+  for(auto& i : pathmap.nodes) {
+    Log::get_client_logger()->trace("node: ({}, {})", i.transform.x, i.transform.y);
+    for(auto j : tilemap.get_neighbors(i.transform)) { // Get neighbors for grid square
+      auto p = pathmap.get(j);
+      if(p) {
+        Log::get_client_logger()->trace("neighbor: ({}, {})", j.transform.x, j.transform.y);
+        i.add_neighbor(p);
       }
     }
   }
