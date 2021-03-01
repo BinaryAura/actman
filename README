@@ -3,6 +3,15 @@ Puzzle Assignment #2
 Information about this puzzle assignment is at:
 https://mst.instructure.com/courses/58110/assignments/255840
 
+repos
+  ActMan
+    hadron (I wrote this)
+      spdlog
+      entt
+      glm
+
+git clone --recursive <repo>
+
 IMPORTANT:
 
 1)
