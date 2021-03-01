@@ -1,10 +1,10 @@
-#include <stdio.h>
+// #include <stdio.h>
 #include <fstream>
-#include <iostream>
-#include <math.h>
+// #include <iostream>
+// #include <math.h>
 
-#include "error.h"
-#include "board/boardconfig.h"
+#include <hadron/error.h>
+#include "boardconfig.h"
 
 BoardConfig::BoardConfig(std::filesystem::path config_file) {
   this->load_config(config_file);

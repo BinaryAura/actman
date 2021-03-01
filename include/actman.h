@@ -1,14 +1,19 @@
 #ifndef ACTMAN_H
 #define ACTMAN_H
 
+#include <hadron/hadron.h>
 #include "actmancommon.h"
-#include "application.h"
-#include "board/boardconfig.h"
-#include "physics/tilephysics.h"
+// #include "application.h"
+#include "boardconfig.h"
+// #include "physics/tilephysics.h"
 
 class ActMan : public Application {
 public:
   ActMan() : Application("ActMan") {}
+  ActMan(const int32_t argc, const char** argv) {
+    this->setup(argc, argv);
+  }
+
   virtual void parse(std::vector<std::string> argv) override;
   virtual void configure() override;
   virtual const std::string usage() const override;

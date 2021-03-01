@@ -19,25 +19,20 @@ project "actman"
 
   includedirs {
     "include",
-    "%{include_dirs.spdlog}",
-    "%{include_dirs.entt}"
+    "%{include_dirs.hadron}",
+    "deps/hadron-engine/%{include_dirs.spdlog}",
+    "deps/hadron-engine/%{include_dirs.entt}",
+    "deps/hadron-engine/%{include_dirs.glm}"
   }
 
   links {
-    "spdlog",
-    "ncurses"
+    "ncurses",
+    "hadron"
   }
 
   files {
-    "src/main.cpp",
-    "src/log.cpp",
     "src/actman.cpp",
-    "src/boardconfig.cpp",
-    "src/scene.cpp",
-    "src/window/curseswindow.cpp",
-    "src/input/cursesinput.cpp",
-    "src/renderer/cursesrenderer.cpp",
-    "src/physics/tilephysics.cpp"
+    "src/boardconfig.cpp"
   }
 
   filter "configurations:Debug"

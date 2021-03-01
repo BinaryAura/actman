@@ -3,7 +3,7 @@
 
 #include <vector>
 // #include "components/transform.h"
-#include "board/cell.h"
+#include "cell.h"
 
 struct DunkyMemory {
   DunkyMemory() = default;
